@@ -8,8 +8,8 @@ nltk.download('punkt')  # For tokenization
 nltk.download('stopwords')
 from nltk.tokenize import TextTilingTokenizer
 
-data_folder = "../data/mini_dataset_storygen_copy"
-images_out_dir = "../generated_images/baseline2"
+data_folder = "../data/clean_dataset"
+images_out_dir = "../generated_images/baseline2_full/"
 df = read_data(data_folder)
 
 df = generateSegments(df)

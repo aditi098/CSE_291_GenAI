@@ -6,7 +6,7 @@ import os
 import pandas as pd
 
 # Load CLIP model
-device = "cuda:3" if torch.cuda.is_available() else "cpu"
+device = "cuda:2" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
 
 # Function to calculate CLIP score
