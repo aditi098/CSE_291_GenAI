@@ -2,14 +2,14 @@ import os
 from utils import read_data
 from segmentation import generateSegments, generateSummaries
 from image_generation import generate_images
-os.environ['CUDA_VISIBLE_DEVICES']='2'
+os.environ['CUDA_VISIBLE_DEVICES']='3'
 import nltk
 nltk.download('punkt')  # For tokenization
 nltk.download('stopwords')
 from nltk.tokenize import TextTilingTokenizer
 
-data_folder = "../data/clean_dataset"
-images_out_dir = "../generated_images/baseline2_full/"
+data_folder = "../data/baseline_2_try"
+images_out_dir = "../generated_images/model3_full/"
 df = read_data(data_folder)
 
 df = generateSegments(df)

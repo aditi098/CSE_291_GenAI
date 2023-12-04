@@ -10,12 +10,13 @@ from collections import defaultdict
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 ttt = TextTilingTokenizer(w = 10, k=5)
 device = "cuda:2"
+from transformers import PegasusForConditionalGeneration, PegasusTokenizer
 
 def clean_segments(segments):
     clean_segment = []
     for segment in segments:
         if len(segment.strip())>10:
-            clean_segment.append(segment)
+            clean_segment.append(segment.strip())
     return clean_segment
 
 
@@ -58,6 +59,29 @@ def generateSummaries(df, summarizer_model_id):
                 summaries.append(summary[0]['summary_text'])
             except Exception as e:
                 print(f"An error occurred with model {summarizer_model_id}: {e}")
+                summaries.append(segment)
+                #append original segment in case of error
+        all_summaries.append(summaries)
+        
+    df["summarized_story"] = all_summaries
+    return df
+
+
+def summarize_with_pegasus(df, model_name="google/pegasus-xsum", max_length=60, min_length=20):
+    
+    all_summaries = []
+    tokenizer = PegasusTokenizer.from_pretrained(model_name)
+    model = PegasusForConditionalGeneration.from_pretrained(model_name)
+    for index, row in tqdm.tqdm(df.iterrows()):
+        summaries = []
+        segments = row["segmented_story"]
+        for segment in segments:
+            try:
+                tokens = tokenizer(segment, truncation=True, padding="longest", return_tensors="pt")
+                summary_ids = model.generate(tokens["input_ids"], max_length=max_length, min_length=min_length, length_penalty=2.0, num_beams=4, early_stopping=True)
+                summaries.append(tokenizer.decode(summary_ids[0], skip_special_tokens=True))
+            except Exception as e:
+                print(f"An error occurred with model {model_name}: {e}")
                 summaries.append(segment)
                 #append original segment in case of error
         all_summaries.append(summaries)
