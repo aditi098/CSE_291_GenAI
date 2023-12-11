@@ -18,7 +18,7 @@ bert_model = AutoModel.from_pretrained("bert-base-uncased").to(device)
 
 
 # prefix = "Generate an artistic interpretation of the text "
-prefix = ""
+# prefix = ""
 
 def generate_images(df, out_dir):
     for index, row in df.iterrows():
@@ -38,6 +38,24 @@ def generate_images(df, out_dir):
                 images[0].save(save_path)
 
 
+def generate_images_baseline0(prompts, prefix=""):
+    generated_images = []
+    if len(prompts)>0:
+        for idx, prompt in enumerate(prompts):    
+            image = text2img_pipe(prefix+prompt).images[0]            
+            generated_images.append(image)
+    return generated_images
+
+
+def generate_images_baseline(prompts, strength, guidance_scale, prefix=""):
+    if len(prompts)>0:
+        init_prompt = prompts[0]
+        init_image = text2img_pipe(prefix+init_prompt).images[0]
+        generated_images = [init_image]
+        for idx, prompt in enumerate(prompts[1:]):    
+            images = img2img_pipe(prompt=prefix+prompt, image=init_image, strength=strength, guidance_scale=guidance_scale).images
+            generated_images.append(images[0])
+    return generated_images
 
 def bert_sentence_embedding(sentence):
     tokens = bert_tokenizer(sentence, return_tensors="pt")
@@ -58,15 +76,15 @@ def findSimilarPromptBert(query, string_list):
     return most_similar_index
 
 
-def generate_images_proposed(story, strength, guidance_scale):
+def generate_images_proposed(story, strength, guidance_scale, prefix=""):
     init_prompt = story[0]
     # print(init_prompt)
     init_image = text2img_pipe(prefix+init_prompt).images[0]
     generated_images = [init_image]
     for idx, prompt in enumerate(story[1:]):
         most_similar_index = findSimilarPromptBert(prompt, story[:idx+1])
-        # print("CURRENT PROMPT:",prompt)
-        # print("SIMILAR PROMPT", story[most_similar_index])
+        print("CURRENT PROMPT:",prompt)
+        print("SIMILAR PROMPT", story[most_similar_index])
         images = img2img_pipe(prompt=prefix+prompt, image=generated_images[most_similar_index], strength=strength, guidance_scale=guidance_scale).images
         generated_images.append(images[0])
     return generated_images
