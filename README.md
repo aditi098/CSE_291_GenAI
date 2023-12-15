@@ -10,12 +10,7 @@ The high-level project structure is organized as follows:
 
 - **data:** Placeholder for project data.
   
-  
 - **generated_images:** Directory for storing generated images.
-  
-- **__pycache__:** Python cache files.
-
-- **README.md:** Project documentation.
 
 - **src:** Source code directory.
 
@@ -36,3 +31,19 @@ The high-level project structure is organized as follows:
   - **story_cleaner.py:** Python script for preprocessing text in stories.
 
   - **utils.py:** Utility functions for the project.
+ 
+To run the project
+
+1. Clone the github repo 
+```
+   git clone <repository_url>
+```
+2. Set up requirements
+   ```
+   pip install -r requirements.txt
+    ```
+4. Run
+   ```
+   python src/main.py
+   ```
+
