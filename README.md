@@ -62,5 +62,3 @@ To run the project
    ```
    python src/main.py
    ```
-
-## Results
