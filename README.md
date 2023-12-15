@@ -8,7 +8,7 @@ This project introduces an innovative approach to generating visualizations from
 
 The high-level project structure is organized as follows:
 
-- **data:** Placeholder for project data.
+- **data:** [Data](https://github.com/aditi098/CSE_291_GenAI/tree/main/data)
   
 - **generated_images:** Directory for storing generated images.
 
@@ -31,17 +31,33 @@ The high-level project structure is organized as follows:
   - **story_cleaner.py:** Python script for preprocessing text in stories.
 
   - **utils.py:** Utility functions for the project.
- 
+    
+  - **install.sh** Script to install all requirements for this project.
+
+## Architecture
+![alt text](https://github.com/aditi098/CSE_291_GenAI/blob/main/arch4.png)
+
+The above diagram is an end-end pipeline for our final architecture. The raw story text is segmented into multiple segments using the TextTiling Segmentor, each of these segments are summarised into a one line summary by DistillBART-xsum. For the first summary, an image is generated using Text-to-image Stable Diffusion. The second image is conditioned on the first image to maintain some consistency in the theme. From thereon, the generated image is conditioned on the image with highest prompt similarity. Finally, two evaluations scores are calculated, one based on the text-image similarity using CLIP to evaluate if the images correspond to the prompts. The second score is used to evaluate the coherency in the storyboard, by doing a pairwise-cosine similarity evaluation on the image embeddings and averaging over them
+
 To run the project
 
 1. Clone the github repo 
 ```
-   git clone <repository_url>
+   git clone https://github.com/aditi098/CSE_291_GenAI.git
 ```
 2. Set up requirements
    ```
-   pip install -r requirements.txt
+   cd src
     ```
+   Give permission to your shell script.
+   ```
+   chmod +x install.sh
+   ```
+
+  Run the shell script
+   ```
+   ./install.sh
+   ```
 4. Run
    ```
    python src/main.py
