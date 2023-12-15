@@ -46,20 +46,21 @@ To run the project
    git clone https://github.com/aditi098/CSE_291_GenAI.git
 ```
 2. Set up requirements
-   ```
-   cd src
+    ```
+    cd src
     ```
    Give permission to your shell script.
    ```
    chmod +x install.sh
    ```
-
   Run the shell script
    ```
    ./install.sh
    ```
+
 4. Run
    ```
    python src/main.py
    ```
 
+## Results
